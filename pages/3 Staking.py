@@ -417,7 +417,11 @@ bar=base.mark_line(color='darkgreen').encode(y='cum_vol_luna:Q')
 
 st.altair_chart((line + bar).resolve_scale(y='independent').properties(title='Daily volume rewarded (LUNA)',width=600))
 
-fig1 = px.line(df2, x="date", y="avg(reward_volume_luna)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="reward_volume_luna"
+)
 fig1.update_layout(
     title='Average weekly volume rewarded per period',
     xaxis_tickfont_size=14,
