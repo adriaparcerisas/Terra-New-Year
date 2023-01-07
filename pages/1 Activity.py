@@ -219,7 +219,7 @@ from blocks
   
 SELECT
 trunc(d.days,'week') as date,
-case when date>='2023-01-01' then '2023' else 'Before' end as period,
+case when date>='2023-01-01' then '2023' else '2022' end as period,
 avg(avg_tx_fee) as avg_tx_fee_per_week,
 avg(txs) as total_weekly_txs,
 avg(total_fees) as total_weekly_fees,
@@ -281,7 +281,11 @@ fig4.update_layout(
 )
 st.plotly_chart(fig4, theme=None, use_container_width=True)
 
-fig1 = px.line(df2, x="date", y=avg("total_weekly_fees"), color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="total_weekly_fees"
+)
 fig1.update_layout(
     title='Average weekly fees per period',
     xaxis_tickfont_size=14,
@@ -328,8 +332,11 @@ fig22.update_layout(
 )
 st.plotly_chart(fig22, theme="streamlit", use_container_width=True)
 
-fig1 = px.line(df2, x="date", y=avg("avg_tps"), color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
-fig1.update_layout(
+fig1 = px.bar(
+    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="total_weekly_fees"
+)fig1.update_layout(
     title='Average TPS per period',
     xaxis_tickfont_size=14,
     yaxis_tickfont_size=14,
