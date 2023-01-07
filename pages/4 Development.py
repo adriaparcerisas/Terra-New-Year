@@ -705,11 +705,7 @@ col6.plotly_chart(fig2, theme=None, use_container_width=True)
 # In[90]:
 
 
-fig1 = px.bar(
-    data_frame=df4.groupby(['period']).mean().reset_index(), 
-    x="period", 
-    y="net_amount_transferred"
-)
+fig8 = px.line(df4, x="date", y="net_amount_transferred", color="stablecoin", color_discrete_sequence=px.colors.qualitative.Vivid)
 fig8.update_layout(
     title='Netflow IBC volume',
     xaxis_tickfont_size=14,
@@ -725,7 +721,11 @@ fig8.update_layout(
 )
 st.plotly_chart(fig8, theme=None, use_container_width=True)
 
-fig1 = px.line(df4, x="date", y="avg(net_amount_transferred)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="net_amount_transferred"
+)
 fig1.update_layout(
     title='Average weekly net volume per period',
     xaxis_tickfont_size=14,
