@@ -53,6 +53,7 @@ st.write('- Cumulative number of new wallets per week')
 sql = f"""
 SELECT 
   trunc(block_timestamp,'week') as date,
+  case when block_timestamp>='2023-01-01' then '2023' else 'Before' end as period,
     count(distinct tx_id) as txs,
     sum(txs) over (order by date) as cum_txs,
     avg(txs) over (order by date, date rows between 6 preceding and current row) as ma7_txs,
@@ -67,7 +68,7 @@ FROM terra.core.fact_transactions
 WHERE tx:body:messages[0]:amount[0]:denom = 'uluna' -- LUNA 2.0 ACTIONS
 AND block_timestamp > '2022-05-28' -- LUNA 2.0 LAUNCH
 AND tx_succeeded = true
-group by 1
+group by 1,2
 order by 1
 """
 
@@ -132,6 +133,22 @@ fig.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+fig1 = px.line(df, x="date", y="avg(txs)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly transactions per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
 
 # In[86]:
@@ -198,6 +215,7 @@ from blocks
   
 SELECT
 trunc(d.days,'week') as date,
+case when date>='2023-01-01' then '2023' else 'Before' end as period,
 avg(avg_tx_fee) as avg_tx_fee_per_week,
 avg(txs) as total_weekly_txs,
 avg(total_fees) as total_weekly_fees,
@@ -209,7 +227,7 @@ sum(new_weekly_users) over (order by date) as cum_new_weekly_users
 from daily d
 join times t on trunc(d.days,'week')=trunc(t.block_debut,'week')
 join news2 n on trunc(d.days,'week')=trunc(n.days,'week')
-group by 1 
+group by 1,2
 order by 1 asc
 """
 
@@ -259,6 +277,22 @@ fig4.update_layout(
 )
 st.plotly_chart(fig4, theme=None, use_container_width=True)
 
+fig1 = px.line(df2, x="date", y="avg(total_weekly_fees)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly fees per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
 
 # In[89]:
 
@@ -289,6 +323,22 @@ fig22.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 st.plotly_chart(fig22, theme="streamlit", use_container_width=True)
+
+fig1 = px.line(df2, x="date", y="avg(avg_tps)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average TPS per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
 
 # In[90]:
@@ -332,6 +382,22 @@ fig3.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 st.plotly_chart(fig3, theme=None, use_container_width=True)
+
+fig1 = px.line(df2, x="date", y="avg(new_weekly_users)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average new week users per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
 
 # In[92]:
@@ -380,6 +446,23 @@ fig2.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 st.plotly_chart(fig2, theme=None, use_container_width=True)
+
+fig1 = px.line(df, x="date", y="avg(volume)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly volume (LUNA) per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
 
 
 # In[ ]:
