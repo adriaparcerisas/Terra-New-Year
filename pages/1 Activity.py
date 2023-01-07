@@ -395,7 +395,11 @@ fig3.update_layout(
 )
 st.plotly_chart(fig3, theme=None, use_container_width=True)
 
-fig1 = px.line(df2, x="date", y=avg("new_weekly_users"), color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="new_weekly_users"
+)
 fig1.update_layout(
     title='Average new week users per period',
     xaxis_tickfont_size=14,
@@ -459,7 +463,11 @@ fig2.update_layout(
 )
 st.plotly_chart(fig2, theme=None, use_container_width=True)
 
-fig1 = px.line(df, x="date", y=avg("volume"), color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="volume"
+)
 fig1.update_layout(
     title='Average weekly volume (LUNA) per period',
     xaxis_tickfont_size=14,
