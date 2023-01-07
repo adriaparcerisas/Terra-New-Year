@@ -410,7 +410,7 @@ col6.plotly_chart(fig7, theme=None, use_container_width=True)
 fig1 = px.bar(
     data_frame=df4.groupby(['period']).mean().reset_index(), 
     x="period", 
-    y="transfers_in"
+    y="transfers_ins"
 )
 fig1.update_layout(
     title='Average weekly transfers in per period',
@@ -430,7 +430,7 @@ st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 fig2 = px.bar(
     data_frame=df4.groupby(['period']).mean().reset_index(), 
     x="period", 
-    y="transfers_out"
+    y="transfers_outs"
 )
 fig2.update_layout(
     title='Average weekly transfers out per period',
