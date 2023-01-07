@@ -134,7 +134,11 @@ fig.update_layout(
 )
 st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
-fig1 = px.line(df, x="date", avg(y="txs"), color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df.groupby(['period']).mean().reset_index(), 
+    x="date", 
+    y="txs"
+)
 fig1.update_layout(
     title='Average weekly transactions per period',
     xaxis_tickfont_size=14,
