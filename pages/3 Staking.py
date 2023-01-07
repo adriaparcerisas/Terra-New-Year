@@ -65,7 +65,7 @@ group by 1,2
   )
 select
 a.date,
-case when a.date>='2023-01-01' then '2023' else 'Before' end as period,
+case when a.date>='2023-01-01' then '2023' else '2022' end as period,
 type,
 price,
 stake_txs,
@@ -333,7 +333,7 @@ group by 1,2,3
   
 select 
 m.date,
-case when m.date>='2023-01-01' then '2023' else 'Before' end as period,
+case when m.date>='2023-01-01' then '2023' else '2022' end as period,
 count(DISTINCT tx_id) as rewards,
 count(DISTINCT RECEIVER) as reward_receivers,
 sum(luna_reward) as reward_volume_luna,
