@@ -121,7 +121,11 @@ fig1.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 
-fig1 = px.line(df1, x="date", y="avg(users)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df1.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="users"
+)
 fig1.update_layout(
     title='Average weekly stakers per period',
     xaxis_tickfont_size=14,
@@ -184,7 +188,11 @@ fig3.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 
-fig1 = px.line(df1, x="date", y="avg(stake_txs)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df1.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="stake_txs"
+)
 fig1.update_layout(
     title='Average weekly staking transactions per period',
     xaxis_tickfont_size=14,
@@ -246,7 +254,11 @@ fig5.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 
-fig1 = px.line(df1, x="date", y="avg(volume)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df1.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="volume"
+)
 fig1.update_layout(
     title='Average weekly staked $LUNA per period',
     xaxis_tickfont_size=14,
@@ -352,7 +364,11 @@ bar=base.mark_line(color='orange').encode(y='reward_receivers:Q')
 
 st.altair_chart((line + bar).resolve_scale(y='independent').properties(title='Daily rewards and receivers over time',width=600))
 
-fig1 = px.line(df2, x="date", y="avg(rewards)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="rewards"
+)
 fig1.update_layout(
     title='Average weekly rewards per period',
     xaxis_tickfont_size=14,
@@ -366,10 +382,13 @@ fig1.update_layout(
     bargap=0.15, # gap between bars of adjacent location coordinates.
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
-st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
-fig1 = px.line(df2, x="date", y="avg(reward_receivers)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
-fig1.update_layout(
+fig2 = px.bar(
+    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="reward_receivers"
+)
+fig2.update_layout(
     title='Average weekly reward receivers per period',
     xaxis_tickfont_size=14,
     yaxis_tickfont_size=14,
@@ -382,7 +401,10 @@ fig1.update_layout(
     bargap=0.15, # gap between bars of adjacent location coordinates.
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
-st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+col1,col2=st.columns(2)
+with col1:
+  st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+col2.plotly_chart(fig2, theme="streamlit", use_container_width=True)
 
 
 # In[99]:
