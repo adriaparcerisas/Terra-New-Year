@@ -60,10 +60,11 @@ select
 )
 SELECT
 trunc(debut,'week') as weeks,
+case when weeks>='2023-01-01' then '2023' else 'Before' end as period,
 count(distinct contract) as new_contracts,
 sum(new_contracts) over (order by weeks) as total_new_contracts
 from tab1
-group by 1
+group by 1,2
 order by 1 asc 
 """
 
@@ -98,6 +99,22 @@ line=base.mark_line(color='darkblue').encode(y='total_new_contracts:Q')
 
 st.altair_chart((line + bar).resolve_scale(y='independent').properties(title='Daily new deployed contracts over time',width=600))
 
+fig1 = px.line(df1, x="date", y="avg(new_contracts)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly new contracts per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
 
 # In[73]:
 
@@ -123,7 +140,7 @@ select
   )
 SELECT
 *
-from tab1
+from tab1 where debut>='2023-01-01'
 order by 2 asc,3 desc  
 """
 
@@ -143,7 +160,7 @@ import plotly.express as px
 
 fig2 = px.bar(df2, x="project_name", y="transactions", color='project_name', color_discrete_sequence=px.colors.qualitative.Antique)
 fig2.update_layout(
-    title='Top deployed contracts by interactions',
+    title='Top deployed contracts by interactions in 2023',
     xaxis_tickfont_size=14,
     yaxis_tickfont_size=14,
     legend=dict(
@@ -166,7 +183,7 @@ import plotly.express as px
 
 fig2 = px.bar(df2, x="project_name", y="users", color='project_name', color_discrete_sequence=px.colors.qualitative.Antique)
 fig2.update_layout(
-    title='Top deployed contracts by users usage',
+    title='Top deployed contracts by users usage in 2023',
     xaxis_tickfont_size=14,
     yaxis_tickfont_size=14,
     legend=dict(
@@ -207,7 +224,7 @@ select
 )
 SELECT
 *
-from tab1
+from tab1 where debut>='2023-01-01'
 order by 4 asc,5 desc  
 """
 
@@ -225,7 +242,7 @@ df3.info()
 
 fig3 = px.bar(df3, x="project_name", y="transactions", color='project_name', color_discrete_sequence=px.colors.qualitative.Antique)
 fig3.update_layout(
-    title='Top deployed contracts sector by interactions',
+    title='Top deployed contracts sector by interactions in 2023',
     xaxis_tickfont_size=14,
     yaxis_tickfont_size=14,
     legend=dict(
@@ -245,7 +262,7 @@ fig3.update_layout(
 
 fig4 = px.bar(df3, x="project_name", y="users", color='project_name', color_discrete_sequence=px.colors.qualitative.Antique)
 fig4.update_layout(
-    title='Top deployed contracts sector by users usage',
+    title='Top deployed contracts sector by users usage in 2023',
     xaxis_tickfont_size=14,
     yaxis_tickfont_size=14,
     legend=dict(
@@ -320,6 +337,7 @@ t3 as (
 )
 SELECT
 ifnull(t2.weeks,t3.weeks) as date,
+case when date>='2023-01-01' then '2023' else 'Before' end as period,
 ifnull(t2.stablecoin,t3.stablecoin) as stablecoin,
 ifnull(transfers_in,0) as transfers_ins,ifnull(transfers_out,0) as transfers_outs, transfers_ins-transfers_outs as net_transfers,
 ifnull(users_depositing,0) as users_depositings,ifnull(users_sending,0) as users_sendings,users_depositings-users_sendings as net_users,
@@ -385,6 +403,43 @@ with col5:
     st.plotly_chart(fig6, theme=None, use_container_width=True)
 col6.plotly_chart(fig7, theme=None, use_container_width=True)
 
+fig1 = px.line(df4, x="date", y="avg(transfers_in)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly transfers in per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
+fig2 = px.line(df4, x="date", y="avg(transfers_out)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig2.update_layout(
+    title='Average weekly transfers out per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
+
+col5,col6=st.columns(2)
+with col5:
+    st.plotly_chart(fig1, theme=None, use_container_width=True)
+col6.plotly_chart(fig2, theme=None, use_container_width=True)
+
 
 # In[86]:
 
@@ -404,6 +459,22 @@ fig8.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 st.plotly_chart(fig8, theme=None, use_container_width=True)
+
+fig1 = px.line(df4, x="date", y="avg(net_transfers)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly net transfers per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
 
 # In[87]:
@@ -445,6 +516,44 @@ with col5:
 col6.plotly_chart(fig7, theme=None, use_container_width=True)
 
 
+fig1 = px.line(df4, x="date", y="avg(users_depositings)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly users transfers in per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
+fig2 = px.line(df4, x="date", y="avg(users_sendings)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig2.update_layout(
+    title='Average weekly users transfers out per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
+
+col5,col6=st.columns(2)
+with col5:
+    st.plotly_chart(fig1, theme=None, use_container_width=True)
+col6.plotly_chart(fig2, theme=None, use_container_width=True)
+
+
 # In[88]:
 
 
@@ -463,6 +572,22 @@ fig8.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 st.plotly_chart(fig8, theme=None, use_container_width=True)
+
+fig1 = px.line(df4, x="date", y="avg(net_users)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly net users per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
 
 # In[89]:
@@ -503,6 +628,43 @@ with col5:
     st.plotly_chart(fig6, theme=None, use_container_width=True)
 col6.plotly_chart(fig7, theme=None, use_container_width=True)
 
+fig1 = px.line(df4, x="date", y="avg(amount_transferred_ins)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly volume in per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
+fig2 = px.line(df4, x="date", y="avg(amount_transferred_outs)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig2.update_layout(
+    title='Average weekly volume out per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig2, theme="streamlit", use_container_width=True)
+
+col5,col6=st.columns(2)
+with col5:
+    st.plotly_chart(fig1, theme=None, use_container_width=True)
+col6.plotly_chart(fig2, theme=None, use_container_width=True)
+
 
 # In[90]:
 
@@ -522,6 +684,22 @@ fig8.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 st.plotly_chart(fig8, theme=None, use_container_width=True)
+
+fig1 = px.line(df4, x="date", y="avg(net_amount_transferred)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly net volume per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
 
 # In[91]:
