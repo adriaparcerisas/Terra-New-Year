@@ -53,7 +53,7 @@ st.write('- Cumulative number of new wallets per week')
 sql = f"""
 SELECT 
   trunc(block_timestamp,'week') as date,
-  case when block_timestamp>='2023-01-01' then '2023' else 'Before' end as period,
+  case when block_timestamp>='2023-01-01' then '2023' else '2022' end as period,
     count(distinct tx_id) as txs,
     sum(txs) over (order by date) as cum_txs,
     avg(txs) over (order by date, date rows between 6 preceding and current row) as ma7_txs,
