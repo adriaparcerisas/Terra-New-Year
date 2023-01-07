@@ -33,7 +33,7 @@ st.write('')
 # In[11]:
 
 
-st.markdown('The full sources used to develop this app can be found to the following link: [Github link](https://github.com/adriaparcerisas/Terra-app)')
+st.markdown('The full sources used to develop this app can be found to the following link: [Github link](https://github.com/adriaparcerisas/Terra-New-Year)')
 
 
 # In[12]:
