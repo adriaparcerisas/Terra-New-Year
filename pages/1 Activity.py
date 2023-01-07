@@ -136,7 +136,7 @@ st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 fig1 = px.bar(
     data_frame=df.groupby(['period']).mean().reset_index(), 
-    x="date", 
+    x="period", 
     y="txs"
 )
 fig1.update_layout(
