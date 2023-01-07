@@ -65,6 +65,7 @@ group by 1,2
   )
 select
 a.date,
+case when a.date>='2023-01-01' then '2023' else 'Before' end as period,
 type,
 price,
 stake_txs,
@@ -120,6 +121,22 @@ fig1.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 
+fig1 = px.line(df1, x="date", y="avg(users)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly stakers per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
 
 # In[90]:
 
@@ -167,6 +184,22 @@ fig3.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 
+fig1 = px.line(df, x="date", y="avg(stake_txs)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly staking transactions per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
 
 # In[92]:
 
@@ -212,6 +245,22 @@ fig5.update_layout(
     bargap=0.15, # gap between bars of adjacent location coordinates.
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
+
+fig1 = px.line(df, x="date", y="avg(volume)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly staked $LUNA per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
 
 # In[94]:
@@ -272,6 +321,7 @@ group by 1,2,3
   
 select 
 m.date,
+case when m.date>='2023-01-01' then '2023' else 'Before' end as period,
 count(DISTINCT tx_id) as rewards,
 count(DISTINCT RECEIVER) as reward_receivers,
 sum(luna_reward) as reward_volume_luna,
@@ -280,7 +330,7 @@ sum(luna_reward*price) as reward_volume_usd,
   sum(reward_volume_usd) over (order by m.date) as cum_vol_usd
 from main m 
   join luna_price l on m.date=l.date
-group by 1
+group by 1,2
 """
 
 
@@ -302,6 +352,38 @@ bar=base.mark_line(color='orange').encode(y='reward_receivers:Q')
 
 st.altair_chart((line + bar).resolve_scale(y='independent').properties(title='Daily rewards and receivers over time',width=600))
 
+fig1 = px.line(df2, x="date", y="avg(rewards)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly rewards per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
+fig1 = px.line(df, x="date", y="avg(reward_receivers)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly reward receivers per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
 
 # In[99]:
 
@@ -311,6 +393,22 @@ line=base.mark_bar(color='green',opacity=0.5).encode(y=alt.Y('reward_volume_luna
 bar=base.mark_line(color='darkgreen').encode(y='cum_vol_luna:Q')
 
 st.altair_chart((line + bar).resolve_scale(y='independent').properties(title='Daily volume rewarded (LUNA)',width=600))
+
+fig1 = px.line(df, x="date", y="avg(reward_volume_luna)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1.update_layout(
+    title='Average weekly volume rewarded per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
 
 # In[100]:
