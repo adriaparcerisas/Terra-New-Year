@@ -336,7 +336,8 @@ fig1 = px.bar(
     data_frame=df2.groupby(['period']).mean().reset_index(), 
     x="period", 
     y="total_weekly_fees"
-)fig1.update_layout(
+)
+fig1.update_layout(
     title='Average TPS per period',
     xaxis_tickfont_size=14,
     yaxis_tickfont_size=14,
