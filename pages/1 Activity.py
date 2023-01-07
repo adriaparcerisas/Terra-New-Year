@@ -335,7 +335,7 @@ st.plotly_chart(fig22, theme="streamlit", use_container_width=True)
 fig1 = px.bar(
     data_frame=df2.groupby(['period']).mean().reset_index(), 
     x="period", 
-    y="total_weekly_fees"
+    y="avg_tps"
 )
 fig1.update_layout(
     title='Average TPS per period',
@@ -350,7 +350,28 @@ fig1.update_layout(
     bargap=0.15, # gap between bars of adjacent location coordinates.
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
-st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+fig2 = px.bar(
+    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="avg_time_per_block_in_sec"
+)
+fig2.update_layout(
+    title='Average TPB per period',
+    xaxis_tickfont_size=14,
+    yaxis_tickfont_size=14,
+    legend=dict(
+        x=0,
+        y=1.0,
+        bgcolor='rgba(255, 255, 255, 0)',
+        bordercolor='rgba(255, 255, 255, 0)'
+    ),
+    bargap=0.15, # gap between bars of adjacent location coordinates.
+    bargroupgap=0.1 # gap between bars of the same location coordinate.
+)
+col1,col2=st.columns(2)
+with col1:
+	st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+col2.plotly_chart(fig2, theme="streamlit", use_container_width=True)
 
 
 # In[90]:
