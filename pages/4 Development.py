@@ -60,7 +60,7 @@ select
 )
 SELECT
 trunc(debut,'week') as weeks,
-case when weeks>='2023-01-01' then '2023' else 'Before' end as period,
+case when weeks>='2023-01-01' then '2023' else '2022' end as period,
 count(distinct contract) as new_contracts,
 sum(new_contracts) over (order by weeks) as total_new_contracts
 from tab1
@@ -341,7 +341,7 @@ t3 as (
 )
 SELECT
 ifnull(t2.weeks,t3.weeks) as date,
-case when date>='2023-01-01' then '2023' else 'Before' end as period,
+case when date>='2023-01-01' then '2023' else '2022' end as period,
 ifnull(t2.stablecoin,t3.stablecoin) as stablecoin,
 ifnull(transfers_in,0) as transfers_ins,ifnull(transfers_out,0) as transfers_outs, transfers_ins-transfers_outs as net_transfers,
 ifnull(users_depositing,0) as users_depositings,ifnull(users_sending,0) as users_sendings,users_depositings-users_sendings as net_users,
