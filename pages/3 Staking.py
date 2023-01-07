@@ -120,6 +120,8 @@ fig1.update_layout(
     bargap=0.15, # gap between bars of adjacent location coordinates.
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
+st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
+
 
 fig1 = px.bar(
     data_frame=df1.groupby(['period']).mean().reset_index(), 
