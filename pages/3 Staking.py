@@ -184,7 +184,7 @@ fig3.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 
-fig1 = px.line(df, x="date", y="avg(stake_txs)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.line(df1, x="date", y="avg(stake_txs)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
 fig1.update_layout(
     title='Average weekly staking transactions per period',
     xaxis_tickfont_size=14,
@@ -246,7 +246,7 @@ fig5.update_layout(
     bargroupgap=0.1 # gap between bars of the same location coordinate.
 )
 
-fig1 = px.line(df, x="date", y="avg(volume)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.line(df1, x="date", y="avg(volume)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
 fig1.update_layout(
     title='Average weekly staked $LUNA per period',
     xaxis_tickfont_size=14,
@@ -368,7 +368,7 @@ fig1.update_layout(
 )
 st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
-fig1 = px.line(df, x="date", y="avg(reward_receivers)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.line(df2, x="date", y="avg(reward_receivers)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
 fig1.update_layout(
     title='Average weekly reward receivers per period',
     xaxis_tickfont_size=14,
@@ -394,7 +394,7 @@ bar=base.mark_line(color='darkgreen').encode(y='cum_vol_luna:Q')
 
 st.altair_chart((line + bar).resolve_scale(y='independent').properties(title='Daily volume rewarded (LUNA)',width=600))
 
-fig1 = px.line(df, x="date", y="avg(reward_volume_luna)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.line(df2, x="date", y="avg(reward_volume_luna)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
 fig1.update_layout(
     title='Average weekly volume rewarded per period',
     xaxis_tickfont_size=14,
