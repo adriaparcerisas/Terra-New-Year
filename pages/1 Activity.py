@@ -464,7 +464,7 @@ fig2.update_layout(
 st.plotly_chart(fig2, theme=None, use_container_width=True)
 
 fig1 = px.bar(
-    data_frame=df2.groupby(['period']).mean().reset_index(), 
+    data_frame=df.groupby(['period']).mean().reset_index(), 
     x="period", 
     y="volume"
 )
