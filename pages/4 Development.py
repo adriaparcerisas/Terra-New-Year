@@ -99,7 +99,11 @@ line=base.mark_line(color='darkblue').encode(y='total_new_contracts:Q')
 
 st.altair_chart((line + bar).resolve_scale(y='independent').properties(title='Daily new deployed contracts over time',width=600))
 
-fig1 = px.line(df1, x="date", y="avg(new_contracts)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df1.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="new_contracts"
+)
 fig1.update_layout(
     title='Average weekly new contracts per period',
     xaxis_tickfont_size=14,
@@ -403,7 +407,11 @@ with col5:
     st.plotly_chart(fig6, theme=None, use_container_width=True)
 col6.plotly_chart(fig7, theme=None, use_container_width=True)
 
-fig1 = px.line(df4, x="date", y="avg(transfers_in)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="transfers_in"
+)
 fig1.update_layout(
     title='Average weekly transfers in per period',
     xaxis_tickfont_size=14,
@@ -419,7 +427,11 @@ fig1.update_layout(
 )
 st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
-fig2 = px.line(df4, x="date", y="avg(transfers_out)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig2 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="transfers_out"
+)
 fig2.update_layout(
     title='Average weekly transfers out per period',
     xaxis_tickfont_size=14,
@@ -460,7 +472,11 @@ fig8.update_layout(
 )
 st.plotly_chart(fig8, theme=None, use_container_width=True)
 
-fig1 = px.line(df4, x="date", y="avg(net_transfers)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="net_transfers"
+)
 fig1.update_layout(
     title='Average weekly net transfers per period',
     xaxis_tickfont_size=14,
@@ -516,7 +532,11 @@ with col5:
 col6.plotly_chart(fig7, theme=None, use_container_width=True)
 
 
-fig1 = px.line(df4, x="date", y="avg(users_depositings)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="users_depositings"
+)
 fig1.update_layout(
     title='Average weekly users transfers in per period',
     xaxis_tickfont_size=14,
@@ -532,7 +552,11 @@ fig1.update_layout(
 )
 st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
-fig2 = px.line(df4, x="date", y="avg(users_sendings)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig2 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="users_sendings"
+)
 fig2.update_layout(
     title='Average weekly users transfers out per period',
     xaxis_tickfont_size=14,
@@ -573,7 +597,11 @@ fig8.update_layout(
 )
 st.plotly_chart(fig8, theme=None, use_container_width=True)
 
-fig1 = px.line(df4, x="date", y="avg(net_users)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="net_users"
+)
 fig1.update_layout(
     title='Average weekly net users per period',
     xaxis_tickfont_size=14,
@@ -628,7 +656,11 @@ with col5:
     st.plotly_chart(fig6, theme=None, use_container_width=True)
 col6.plotly_chart(fig7, theme=None, use_container_width=True)
 
-fig1 = px.line(df4, x="date", y="avg(amount_transferred_ins)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig1 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="amount_transferred_ins"
+)
 fig1.update_layout(
     title='Average weekly volume in per period',
     xaxis_tickfont_size=14,
@@ -644,7 +676,11 @@ fig1.update_layout(
 )
 st.plotly_chart(fig1, theme="streamlit", use_container_width=True)
 
-fig2 = px.line(df4, x="date", y="avg(amount_transferred_outs)", color="period", color_discrete_sequence=px.colors.qualitative.Vivid)
+fig2 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="amount_transferred_outs"
+)
 fig2.update_layout(
     title='Average weekly volume out per period',
     xaxis_tickfont_size=14,
@@ -669,7 +705,11 @@ col6.plotly_chart(fig2, theme=None, use_container_width=True)
 # In[90]:
 
 
-fig8 = px.line(df4, x="date", y="net_amount_transferred", color="stablecoin", color_discrete_sequence=px.colors.qualitative.Plotly)
+fig1 = px.bar(
+    data_frame=df4.groupby(['period']).mean().reset_index(), 
+    x="period", 
+    y="net_amount_transferred"
+)
 fig8.update_layout(
     title='Netflow IBC volume',
     xaxis_tickfont_size=14,
